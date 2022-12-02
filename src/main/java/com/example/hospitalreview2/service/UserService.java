@@ -25,12 +25,13 @@ public class UserService {
                 });
 
         // 테이블에 저장한다.
-        User savedUser = userRepository.save(request.toEntity());
+        String password = encoder.encode(request.getPassword());
+        User savedUser = userRepository.save(request.toEntity(password));
 
         return UserDto.builder()
                 .id(savedUser.getId())
                 .userName(savedUser.getUserName())
-                .password(encoder.encode(savedUser.getPassword()))
+                .password(savedUser.getPassword())
                 .email(savedUser.getEmailAddress())
                 .build();
     }
