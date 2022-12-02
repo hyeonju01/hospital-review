@@ -7,6 +7,7 @@ import com.example.hospitalreview2.exception.ErrorCode;
 import com.example.hospitalreview2.exception.HospitalReviewException;
 import com.example.hospitalreview2.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder;
     public UserDto join(UserJoinRequest request) {
 
         // userName 중복 여부를 확인한다.
@@ -28,6 +30,7 @@ public class UserService {
         return UserDto.builder()
                 .id(savedUser.getId())
                 .userName(savedUser.getUserName())
+                .password(encoder.encode(savedUser.getPassword()))
                 .email(savedUser.getEmailAddress())
                 .build();
     }
